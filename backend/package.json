@@ -10,7 +10,8 @@
     "build": "tsc",
     "setup": "node scripts/setup-database.js",
     "migrate": "tsx scripts/runMigrations.ts",
-    "seed": "node scripts/seed.js"
+    "seed": "node scripts/seed.js",
+    "heroku-postbuild": "npm install --include=dev"
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
