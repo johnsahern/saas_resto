@@ -39,41 +39,25 @@ validateConfig();
 // Debug: afficher la configuration CORS
 console.log('🔧 Configuration CORS:', config.cors.origin);
 
-// =======================================================================
-// MIDDLEWARES GLOBAUX
-// =======================================================================
+// ===================== CONFIGURATION CORS =====================
+// Liste des domaines autorisés (à adapter selon tes besoins)
+const allowedOrigins = [
+  'https://monresto.emergyne.com', // Frontend principal
+  'https://saas-resto.onrender.com', // API Render (optionnel, pour tests) // Autre port local éventuel
+];
 
-// Sécurité
-app.use(helmet({
-  crossOriginResourcePolicy: { policy: "cross-origin" }
-}));
-
-// CORS
 app.use(cors({
   origin: function (origin, callback) {
-    // En développement, autoriser toutes les origines localhost
-    if (config.env === 'development') {
-      if (!origin || origin.startsWith('http://localhost:')) {
-        callback(null, true);
-      } else {
-        callback(null, false);
-      }
-    } else {
-      // En production, utiliser la configuration stricte
-      if (!origin) {
-        callback(null, false);
-        return;
-      }
-      if (Array.isArray(config.cors.origin)) {
-        callback(null, config.cors.origin.includes(origin));
-      } else if (typeof config.cors.origin === 'boolean') {
-        callback(null, config.cors.origin);
-      } else {
-        callback(null, false);
-      }
-    }
+    // Autoriser les outils type Postman (origin === undefined)
+    if (!origin) return callback(null, true);
+    // Autoriser tous les localhost en dev
+    if (origin.startsWith('http://localhost:')) return callback(null, true);
+    // Autoriser les domaines explicitement listés
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    // Sinon, refuser
+    return callback(new Error('Not allowed by CORS'), false);
   },
-  credentials: config.cors.credentials,
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Restaurant-ID']
 }));
