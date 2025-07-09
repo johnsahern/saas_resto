@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+  --color-primary: #10b981; /* Vert émeraude */
+  --color-secondary: #ffb347; /* Orange doux */
+  --color-bg: #f9fafb; /* Fond très clair */
+  --color-card: #fff;
+  --color-text: #222;
+  --color-muted: #6b7280;
+  --color-accent: #ffd700; /* Doré pour les highlights */
+  --color-danger: #ef4444;
+  --color-success: #22c55e;
+  --color-border: #e5e7eb;
+}
+
+html {
+  font-size: 16px;
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', 'Roboto', Arial, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0 0 0.5em 0;
+}
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+button {
+  font-family: inherit;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.75em;
+  padding: 0.75em 1.5em;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(16,185,129,0.08);
+}
+button:active {
+  background: var(--color-secondary);
+}
+.card {
+  background: var(--color-card);
+  border-radius: 1em;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  padding: 1.25em;
+  margin-bottom: 1em;
+  border: 1px solid var(--color-border);
+}
+::-webkit-scrollbar {
+  width: 8px;
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+@media (max-width: 600px) {
+  html { font-size: 15px; }
+  .card { padding: 1em; }
+  button { width: 100%; padding: 1em; font-size: 1.1rem; }
+}

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Resto - Inscription Restaurant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            margin: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 2rem;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid #fcc;
+        }
+
+        .success {
+            background: #efe;
+            color: #363;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid #cfc;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .step.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .step.completed {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .features {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .feature-icon {
+            color: #667eea;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🍽️ Mon Resto</div>
+            <div class="subtitle">Créez votre restaurant en quelques minutes</div>
+        </div>
+
+        <div class="step-indicator">
+            <div class="step active" id="step1">1</div>
+            <div class="step" id="step2">2</div>
+            <div class="step" id="step3">✓</div>
+        </div>
+
+        <div id="error-message" class="error" style="display: none;"></div>
+        <div id="success-message" class="success" style="display: none;"></div>
+
+        <form id="registration-form">
+            <!-- Étape 1: Informations Restaurant -->
+            <div id="restaurant-step" class="step-content">
+                <h3 style="margin-bottom: 1.5rem; color: #333;">Informations de votre restaurant</h3>
+                
+                <div class="form-group">
+                    <label for="restaurant_name">Nom du restaurant *</label>
+                    <input type="text" id="restaurant_name" name="restaurant_name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="restaurant_address">Adresse complète *</label>
+                    <input type="text" id="restaurant_address" name="restaurant_address" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="restaurant_phone">Téléphone *</label>
+                        <input type="tel" id="restaurant_phone" name="restaurant_phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="restaurant_email">Email *</label>
+                        <input type="email" id="restaurant_email" name="restaurant_email" required>
+                    </div>
+                </div>
+
+                <button type="button" id="next-step" class="btn">Continuer</button>
+            </div>
+
+            <!-- Étape 2: Informations Propriétaire -->
+            <div id="owner-step" class="step-content" style="display: none;">
+                <h3 style="margin-bottom: 1.5rem; color: #333;">Vos informations personnelles</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="owner_first_name">Prénom *</label>
+                        <input type="text" id="owner_first_name" name="owner_first_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="owner_last_name">Nom *</label>
+                        <input type="text" id="owner_last_name" name="owner_last_name" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="owner_email">Votre email (connexion) *</label>
+                    <input type="email" id="owner_email" name="owner_email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mot de passe *</label>
+                    <input type="password" id="password" name="password" required minlength="8">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Confirmer le mot de passe *</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                </div>
+
+                <button type="button" id="prev-step" class="btn" style="background: #ccc; margin-bottom: 1rem;">Retour</button>
+                <button type="submit" id="submit-btn" class="btn">
+                    <span id="submit-text">Créer mon restaurant</span>
+                </button>
+            </div>
+        </form>
+
+        <div class="features">
+            <div class="feature">
+                <span class="feature-icon">✅</span>
+                Gestion complète de votre restaurant
+            </div>
+            <div class="feature">
+                <span class="feature-icon">📊</span>
+                Statistiques et analyses en temps réel
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🚀</span>
+                Démarrage immédiat, sans installation
+            </div>
+            <div class="feature">
+                <span class="feature-icon">💰</span>
+                Première semaine gratuite
+            </div>
+        </div>
+
+        <div class="login-link">
+            Vous avez déjà un compte ? 
+            <a href="#" onclick="redirectToLogin()">Se connecter</a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
